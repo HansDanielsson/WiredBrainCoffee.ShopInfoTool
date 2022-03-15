@@ -3,7 +3,7 @@ using WiredBrainCoffee.DataAccess;
 
 Console.WriteLine("Wired Brain Coffee - Shop Info Tool!");
 
-Console.WriteLine("Write 'help' to list available commands");
+Console.WriteLine("Write 'help' to list available coffee shop commands");
 
 var coffeeShopDataProvider = new CoffeeShopDataProvider();
 
