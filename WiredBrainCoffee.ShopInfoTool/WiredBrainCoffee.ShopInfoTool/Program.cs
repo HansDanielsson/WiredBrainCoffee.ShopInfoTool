@@ -1,5 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using WiredBrainCoffee.DataAccess;
+using WiredBrainCoffee.ShopInfoTool;
 
 Console.WriteLine("Wired Brain Coffee - Shop Info Tool!");
 
@@ -19,36 +20,10 @@ while (true)
 
     var coffeeShops = coffeeShopDataProvider.LoadCoffeeShops();
 
-    if (string.Equals("help", line, StringComparison.OrdinalIgnoreCase))
-    {
-        Console.WriteLine("> Available coffee shop commands:");
-        foreach (var coffeeShop in coffeeShops)
-        {
-            Console.WriteLine($"> " + coffeeShop.Location);
-        }
-    }
-    else
-    {
-        var foundCoffeShops = coffeeShops
-            .Where(x => x.Location.StartsWith(line, StringComparison.OrdinalIgnoreCase))
-            .ToList();
-        if (foundCoffeShops.Count == 0)
-        {
-            Console.WriteLine($"> Command '{line}' not found");
-        }
-        else if (foundCoffeShops.Count == 1)
-        {
-            var coffeeShop = foundCoffeShops.Single();
-            Console.WriteLine($"> Location: {coffeeShop.Location}");
-            Console.WriteLine($"> Beans in stock: {coffeeShop.BeansInStockInKg} kg");
-        }
-        else
-        {
-            Console.WriteLine($"> Multiple matching shop commands found:");
-            foreach (var coffeeType in foundCoffeShops)
-            {
-                Console.WriteLine($"> {coffeeType.Location}");
-            }
-        }
-    }
+    var commandHandler =
+    string.Equals("help", line, StringComparison.OrdinalIgnoreCase)
+    ? new HelpCommandHandler(coffeeShops) as ICommandHandler
+    : new CoffeeShopCommandHandler(coffeeShops, line);
+
+    commandHandler.HandleCommand();
 }
